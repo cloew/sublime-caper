@@ -1,5 +1,6 @@
 import sublime, sublime_plugin
 
+import json
 import subprocess
 
 class CaperCommand(sublime_plugin.TextCommand):
@@ -13,5 +14,6 @@ class CaperCommand(sublime_plugin.TextCommand):
         line = self.view.rowcol(self.view.sel()[0].begin())[0]+1
 
         args = [self.PYTHON_PATH, self.CAPER_PATH, filename, '-l', str(line), '-e', self.PYTHON_PATH]
-        process = subprocess.Popen(args, stdout=subprocess.PIPE)
-        print(process.stdout.read())
+        results = subprocess.check_output(args)
+        results = results.decode("utf-8")
+        print(json.loads(results))
